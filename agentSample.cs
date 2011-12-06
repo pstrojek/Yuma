@@ -102,6 +102,48 @@ namespace CsClient
                 }
             }
         }
+        
+        
+        static void LookAround()
+        {
+       
+	    
+	    Console.WriteLine("Oglądam się dookoła");
+	    
+	    agentTomek.Look();
+	    agentTomek.RotateRight();
+	    agentTomek.Look();
+	    agentTomek.RotateRight();
+	    agentTomek.Look();
+	    agentTomek.RotateRight();
+	    agentTomek.Look();
+	    agentTomek.RotateRight();
+
+	    
+
+        }
+        
+        
+        static void IdzProsto(int n)
+        {
+            for(int i=0 ; i < n ; i++)
+            {
+                agentTomek.StepForward();
+                
+            }
+            
+        }
+        
+        static void GodMode()
+        {
+            bool loop = true;
+            while(loop) {
+                energy += 500;
+            }
+            
+        }
+        
+        
 
         // ładujemy się
         private static void Recharge()

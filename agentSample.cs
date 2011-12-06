@@ -198,12 +198,16 @@ namespace CsClient
             {
             	case "N":
             	 ObecnePolozenieY += 1;
+            	 break;
             	case "S":
             	 ObecnePolozenieY -= 1; 
+            	 break;
             	case "W":
             	 ObecnePolozenieX -= 1;
+            	 break;
             	case "E":
             	 ObecnePolozenieX += 1;
+            	 break;
                 
             }
         }

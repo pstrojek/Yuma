@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Data.Realm;
 using Data;
 
@@ -9,11 +9,18 @@ namespace CsClient
         static AgentAPI agentTomek; //nasz agent, instancja klasy AgentAPI
         static int energy; //tu zapisujemy aktualną energię naszego agenta
         static WorldParameters cennikSwiata; //tu zapisujemy informacje o świecie
-
+        static int[,] Przeszkody;          //deklaracja tablicy, w ktorej bedziemy przetrzymywac wsp. przeszkod.
+        static int[,] ZrodlaNieOdn;        //deklaracja tablicy, w ktorej bedziemy trzymac wsp. zrodel energii NieOdnawialnych
+        static int[,] ZrodlaOdn;           //tutaj trzymamy wsp. odnawialnych 
+        static int ObecnePolozenieX=0;
+        static int ObecnePolozenieY=0;
+        static string kierunek="N";      // jako domyslna wart. przyjmuje N, nie jest wazne jaki kierunek jest to faktycznie
+        				 // bo wykorzystujemy to tylko do wlasnych potrzeb.
+        				 // pozniej przyjmuje W, N, E, S - potrzebne od zapamietywania kierunku -> modyfikacji polozenia
  
         // Nasza metoda nasłuchująca
-        static void Listen(String krzyczacyAgent, String komunikat) {
-            Console.WriteLine(krzyczacyAgent + " krzyczy " + komunikat);
+        static void Listen(String krzyczacyAgent, String komunikat) {         //czy tutaj powinien byc przekazywany obiekt typu string ??
+            Console.WriteLine(krzyczacyAgent + " krzyczy " + komunikat);      //mam na mysli krzyczacyAgent
         }
         
         static void Main(string[] args)
@@ -21,6 +28,8 @@ namespace CsClient
             //powtarzamy czynnosci az nam się uda
             while (true)
             {
+            	
+                             //nie rozumiem ponizszego - po co przekazywac metode nasluchujaca ??
                 agentTomek = new AgentAPI(Listen); //tworzymy nowe AgentAPI, podając w parametrze naszą metodę nasłuchującą
 
                 // pobieramy parametry połączenia i agenta z klawiatury
@@ -53,7 +62,7 @@ namespace CsClient
 
                     //ustawiamy nasza energie na poczatkowa energie kazdego agenta w danym swiecie
                     energy = cennikSwiata.initialEnergy;
-                    //przechodzimy do obslugi zdarzen z klawiatury. Zamiast tej funkcji wstaw logikę poruszania się twojego agenta.
+                    //przechodzimy do obslugi zdarzen z klawiatury. Zamiast tej funkcji wstaw logikę poruszania się twojego agenta.        
                     KeyReader();
                     //na koncu rozlaczamy naszego agenta
                     agentTomek.Disconnect();
@@ -87,7 +96,7 @@ namespace CsClient
                         break;
                     case ConsoleKey.UpArrow: StepForward();
                         break;
-                    case ConsoleKey.LeftArrow: RotateLeft();
+                    case ConsoleKey.LeftArrow: RotateLeft();                  
                         break;
                     case ConsoleKey.RightArrow: RotateRight();
                         break;
@@ -105,10 +114,8 @@ namespace CsClient
         
         
         static void LookAround()
-        {
-       
-	    
-	    Console.WriteLine("Oglądam się dookoła");
+        {	    
+	    Console.WriteLine("Rozglądam się dookoła");
 	    
 	    agentTomek.Look();
 	    agentTomek.RotateRight();
@@ -118,21 +125,10 @@ namespace CsClient
 	    agentTomek.RotateRight();
 	    agentTomek.Look();
 	    agentTomek.RotateRight();
-
-	    
-
         }
         
         
-        static void IdzProsto(int n)
-        {
-            for(int i=0 ; i < n ; i++)
-            {
-                agentTomek.StepForward();
-                
-            }
-            
-        }
+     
         
         static void GodMode()
         {
@@ -168,7 +164,19 @@ namespace CsClient
             if (!agentTomek.RotateLeft())
                 Console.WriteLine("Obrot nie powiodl sie - brak energii");
             else
-                energy -= cennikSwiata.rotateCost;
+                energy -= cennikSwiata.rotateCost;  
+           if (kierunek=="N")
+               kierunek="W";
+               
+           else if(kierunek=="W")
+               kierunek="S";
+               
+           else if(kierunek=="S")
+               kierunek="E";
+               
+           else (kierunek=="E")
+               kierunek="N";
+        
         }
 
         //obracamy się w prawo
@@ -178,6 +186,18 @@ namespace CsClient
                 Console.WriteLine("Obrot nie powiodl sie - brak energii");
             else
                 energy -= cennikSwiata.rotateCost; //musimy sami zadbać o aktualizację naszej bieżącej energii - serwer nie dostarczy nam tej informacji
+        
+            if (kierunek=="N")
+               kierunek="E";
+               
+           else if(kierunek=="E")
+               kierunek="S";
+               
+           else if(kierunek=="S")
+               kierunek="W";
+               
+           else (kierunek=="W")
+               kierunek="N";
         }
 
         //idziemy do przodu
@@ -188,6 +208,17 @@ namespace CsClient
             if (energy >= cennikSwiata.moveCost)
                 energy -= cennikSwiata.moveCost;//musimy sami zadbać o aktualizację naszej bieżącej energii - serwer nie dostarczy nam tej informacji
                                                 // w tym wypadku zużytą energię policzyliśmy błędnie - nie uwzględniliśmy różnicy wysokości terenu (patrz Dokumentacja)
+        
+            switch(kierunek)
+            {
+            	case "N":
+            	
+            	case "S":
+            	
+            	case "W":
+            	
+            	case "E":
+            }
         }
 
         private static void Look()

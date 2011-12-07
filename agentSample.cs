@@ -6,6 +6,7 @@ namespace CsClient
 {
     public class Program
     {
+    	
         static AgentAPI agentTomek; //nasz agent, instancja klasy AgentAPI
         static int energy; //tu zapisujemy aktualną energię naszego agenta
         static WorldParameters cennikSwiata; //tu zapisujemy informacje o świecie
@@ -170,6 +171,7 @@ namespace CsClient
         {
             if (!agentTomek.RotateRight())
                 Console.WriteLine("Obrot nie powiodl sie - brak energii");
+                
             else
                 energy -= cennikSwiata.rotateCost; //musimy sami zadbać o aktualizację naszej bieżącej energii - serwer nie dostarczy nam tej informacji
         
@@ -211,6 +213,12 @@ namespace CsClient
                 
             }
         }
+        
+        private static void Jedz(){
+        Console.WriteLine("Om nom nom nom");	
+        	
+        }
+
 
         private static void Look()
         {

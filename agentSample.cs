@@ -197,8 +197,8 @@ namespace CsClient
         //idziemy do przodu
         private static void StepForward()      //teraz teoretycznie (nie sprawdzalem w praktyce) StepForward jest juz w tanie aktualizowac
         { 										//energie oraz polozenie agenta po kazdym wykonanym ruchu.
-            int y = liczPoleDocelY(ObecnePolozenieY);
-            int x = liczPoleDocelX(ObecnePolozenieX);
+            int y = LiczPoleDocelY(ObecnePolozenieY);
+            int x = LiczPoleDocelX(ObecnePolozenieX);
             int[,] poleDocelowe = new int [x,y];
             int[,] poleAgenta = new int [ObecnePolozenieX,ObecnePolozenieY];
 
@@ -284,7 +284,7 @@ namespace CsClient
                     foreach (OrientedField pole in pola)
                     {
                         Console.WriteLine("-----------------------------");
-                        Console.WriteLine("POLE " + liczPoleDocelX(ObecnePolozenieX) + "," + liczPoleDocelY(ObecnePolozenieY));  //pole.x pole.y
+                        Console.WriteLine("POLE " + LiczPoleDocelX(ObecnePolozenieX) + "," + LiczPoleDocelY(ObecnePolozenieY));  //pole.x pole.y
                         Console.WriteLine("Wysokosc: " + pole.height);          // tutaj zdaje sie moze tak zostac, nomenklatura nie ma znaczenia
                         if (pole.energy != 0)						            // dla danego pola wysokosc jest bezwzgledna
                             Console.WriteLine("Energia: " + pole.energy);       // ---||---

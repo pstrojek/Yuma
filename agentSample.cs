@@ -36,14 +36,12 @@ namespace CsClient
                 agentTomek = new AgentAPI(Listen); //tworzymy nowe AgentAPI, podając w parametrze naszą metodę nasłuchującą
 
                 // pobieramy parametry połączenia i agenta z klawiatury
-                Console.Write("Podaj IP serwera: ");
-                String ip = Console.ReadLine();
-
-                Console.Write("Podaj nazwe druzyny: ");
-                String groupname = Console.ReadLine();
-
-                Console.Write("Podaj haslo: ");
-                String grouppass = Console.ReadLine();
+                
+                String ip = "atlantyda.vm.wmi.amu.edu.pl";   //ustawiłem na sztywno bo bez sensu ciągle wpisywać.
+              
+                String groupname = "Yuma"; 
+                
+                String grouppass = "odarjd" 
 
                 Console.Write("Podaj nazwe swiata: ");
                 String worldname = Console.ReadLine();
@@ -66,7 +64,7 @@ namespace CsClient
                     //ustawiamy nasza energie na poczatkowa energie kazdego agenta w danym swiecie
                     energy = cennikSwiata.initialEnergy;
                     //przechodzimy do obslugi zdarzen z klawiatury. Zamiast tej funkcji wstaw logikę poruszania się twojego agenta.
-                    KeyReader();
+                    //KeyReader();
                     //na koncu rozlaczamy naszego agenta
                     agentTomek.Disconnect();
                     Console.ReadKey();
@@ -167,7 +165,7 @@ namespace CsClient
             	else if(kierunek=="S")
             		kierunek="E";
 
-            	else (kierunek=="E")
+            	else if(kierunek=="E")
             		   kierunek="N";
             }
         }
@@ -191,7 +189,7 @@ namespace CsClient
             	else if(kierunek=="S")
                		kierunek="W";
 
-            	else (kierunek=="W")
+            	else if(kierunek=="W")
                		kierunek="N";
             }
         }
@@ -200,7 +198,7 @@ namespace CsClient
         private static void StepForward()      //teraz teoretycznie (nie sprawdzalem w praktyce) StepForward jest juz w tanie aktualizowac
         { 										//energie oraz polozenie agenta po kazdym wykonanym ruchu.
             int y = liczPoleDocelY(ObecnePolozenieY);
-        	int x = liczPoleDocelX(ObecnePolozenieX)
+            int x = liczPoleDocelX(ObecnePolozenieX);
             int[,] poleDocelowe = new int [x,y];
             int[,] poleAgenta = new int [ObecnePolozenieX,ObecnePolozenieY];
 

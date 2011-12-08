@@ -202,12 +202,12 @@ namespace CsClient
             int[,] poleDocelowe = new int [x,y];
             int[,] poleAgenta = new int [ObecnePolozenieX,ObecnePolozenieY];
 
-        	if (energy < moveCost * (1 + (poleDocelowe.height - poleAgenta.height)/100))
+        	if (energy < cennikSwiata.moveCost * (1 + (poleDocelowe.height - poleAgenta.height)/100))
                 Console.WriteLine("Za malo energii Wujku");
 
         	else
         	{
-        		energy -= moveCost * (1 + (poleDocelowe.height - poleAgenta.height)/100);
+        		energy -= cennikSwiata.moveCost * (1 + (poleDocelowe.height - poleAgenta.height)/100);
 
         		switch(kierunek)
             	{

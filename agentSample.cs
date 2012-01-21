@@ -27,7 +27,7 @@ namespace CsClient
          // pozniej przyjmuje W, N, E, S - potrzebne od zapamietywania kierunku -> modyfikacji polozenia
         int poleDoceloweX=0;
         int poleDoceloweY=0;
-        
+        static string gimie = "";
         //public Bot myBot;
        	//public User myUser;
 
@@ -60,6 +60,8 @@ namespace CsClient
 
                 Console.Write("Podaj imie: ");
                 String imie = Console.ReadLine();
+                
+                 gimie = imie;
 
                 try
                 {
@@ -115,6 +117,8 @@ namespace CsClient
                         break;
                     case ConsoleKey.Enter: Speak();
                         break;
+                    case ConsoleKey.G: ConReadline();
+                        break;
                     case ConsoleKey.Q: loop = false;
                         break;
                     case ConsoleKey.D: agentTomek.Disconnect();
@@ -125,6 +129,26 @@ namespace CsClient
             }
         }
         
+        
+        
+        //Czyta linie w poszukiwaniu krzyczy i zwraca komunikat
+        static void ConReadline()
+        {
+        	string str = Console.ReadLine();
+        	
+        	if (!str.StartsWith(gimie))
+        	{
+        		
+        	int first = str.IndexOf("krzyczy");
+        	int last = str.LastIndexOf("");
+            string str2 = str.Substring(first+8, last);
+        	getOutput(str2);
+        	    	
+        	}
+
+
+        
+        }
         
         
         static void AIML() {
@@ -224,20 +248,6 @@ static void Testowe() {
         }
         
         
-        static void LookAround()
-        {
-Console.WriteLine("Rozglądam się dookoła");
-Console.WriteLine("---------------------");
-agentTomek.Look();
-agentTomek.RotateRight();
-agentTomek.Look();
-agentTomek.RotateRight();
-agentTomek.Look();
-agentTomek.RotateRight();
-agentTomek.Look();
-agentTomek.RotateRight();
-Console.WriteLine("---------------------");
-        }
 
         // ładujemy się
         private static void Recharge()
@@ -250,32 +260,23 @@ Console.WriteLine("---------------------");
         //wysyłamy komunikat
         private static void Speak()
         {
-            string input = Console.ReadLine();
-         if (energy < cennikSwiata.speakCost)
+            if (!agentTomek.Speak(Console.ReadLine(), 1))
                 Console.WriteLine("Mowienie nie powiodlo sie - brak energii");
             else
-                Console.WriteLine(input);
-             energy -= cennikSwiata.speakCost;
+                energy -= cennikSwiata.speakCost;
         }
 
         //obracamy się w lewo
         private static void RotateLeft() //Switch w RotateLeft (tak samo w RotateRight) obslguje aktualizacje kierunku po kazdym obrocie
-        { //jest to pozniej wykorzystywane przy obliczaniu aktualnych wsp. po kazdym ruchu w StepForward
+        { 
         
 if (!agentTomek.RotateLeft())
                 Console.WriteLine("Obrot nie powiodl sie - brak energii");
                 
-            else
+else{
                 energy -= cennikSwiata.rotateCost;
-            
-           
-        	
-/*
-        	if (energy < cennikSwiata.rotateCost)
-                Console.WriteLine("Obrot nie powiodl sie - brak energii");
-            else
-            {
-                energy -= cennikSwiata.rotateCost;
+                       
+
                 
              if (kierunek=="N")
              kierunek="W";
@@ -290,26 +291,17 @@ if (!agentTomek.RotateLeft())
              kierunek="N";
              
             }
-            */
+           
         }
 
         //obracamy się w prawo
         private static void RotateRight()
         {
-        	
-        	
-        	
+        	       	        	
         	 if (!agentTomek.RotateRight())
                 Console.WriteLine("Obrot nie powiodl sie - brak energii");
-            else
-                energy -= cennikSwiata.rotateCost; /*
-        	
-            if (energy < cennikSwiata.rotateCost)
-                Console.WriteLine("Obrot nie powiodl sie - brak energii");
-
-            else
-            {
-                energy -= cennikSwiata.rotateCost;
+        	 else{
+                energy -= cennikSwiata.rotateCost; 
 
              if (kierunek=="N")
                 kierunek="E";
@@ -324,12 +316,12 @@ if (!agentTomek.RotateLeft())
                 kierunek="N";
                 
             }
-            */
+            
         }
 
         //idziemy do przodu
-        private static void StepForward() //teraz teoretycznie (nie sprawdzalem w praktyce) StepForward jest juz w tanie aktualizowac
-        { //energie oraz polozenie agenta po kazdym wykonanym ruchu.
+        private static void StepForward() 
+        { 
         	if (!agentTomek.StepForward()){
         		OminPrzeszkode();
         			Console.WriteLine("Omijam");
@@ -337,110 +329,30 @@ if (!agentTomek.RotateLeft())
                 
             if (energy >= cennikSwiata.moveCost)
                 energy -= cennikSwiata.moveCost;
+        	System.Threading.Thread.Sleep(2000);  
         	
-        	
-            int y = LiczPoleDocelY(ObecnePolozenieY);
-         int x = LiczPoleDocelX(ObecnePolozenieX);
-            int[,] poleDocelowe = new int [x,y];
-            int[,] poleAgenta = new int [ObecnePolozenieX,ObecnePolozenieY];
-
-   /*      if (energy < cennikSwiata.moveCost * (1 + (poleDocelowe.height - poleAgenta.height)/100))
-                Console.WriteLine("Za malo energii Wujku");
-
-         else
-         {
-         energy -= cennikSwiata.moveCost * (1 + (poleDocelowe.height - poleAgenta.height)/100);
-
-         switch(kierunek)
-             {
-             case "N":
-             ObecnePolozenieY += 1;
-             break;
-             case "S":
-             ObecnePolozenieY -= 1;
-             break;
-             case "W":
-             ObecnePolozenieX -= 1;
-             break;
-             case "E":
-             ObecnePolozenieX += 1;
-             break;
-             }
-         }
-         */
-        Recharge();
-        Recharge();
-        }
-
-        private static int LiczPoleDocelY(int Y)
-        {
-            switch(kierunek)
-            {
-             case "N":
-            // poleDoceloweY=Y + 1;
-             //poleDoceloweX=ObecnePolozenieX;
-             break;
-             case "S":
-           //  poleDoceloweY=Y - 1;
-             //poleDoceloweX=ObecnePolozenieX;
-             break;
-             /*case "W":
-poleDoceloweX=ObecnePolozenieX - 1;
-poleDoceloweY=ObecnePolozenieY;
-break;
-case "E":
-poleDoceloweX=ObecnePolozenieX + 1;
-poleDoceloweY=ObecnePolozenieY;
-break;
-*/
-            }
-            return 0;
-        }
-
-        private static int LiczPoleDocelX(int X)
-        {
-            switch(kierunek)
-            {
-             /*case "N":
-poleDoceloweY=ObecnePolozenieY + 1;
-//poleDoceloweX=ObecnePolozenieX;
-break;
-case "S":
-poleDoceloweY=ObecnePolozenieY - 1;
-//poleDoceloweX=ObecnePolozenieX;
-break;*/
-                case "W":
-              //  poleDoceloweX = X - 1;
-                //poleDoceloweY=ObecnePolozenieY;
-                break;
-                case "E":
-                  //  poleDoceloweX = X + 1;
-            //poleDoceloweY=ObecnePolozenieY;
-               break;
-                    }
-                    return 0;
-                }
-
-        private static void Look()
-                {
-                    OrientedField[] pola = agentTomek.Look(); //dostajemy listę pól które widzi nasz agent
-
-                    //wyświetlamy informacje o wszystkich widzianych polach
-                    foreach (OrientedField pole in pola)
-                    {
-                        Console.WriteLine("-----------------------------");
-                        Console.WriteLine("POLE " + LiczPoleDocelX(ObecnePolozenieX) + "," + LiczPoleDocelY(ObecnePolozenieY)); //pole.x pole.y
-                        Console.WriteLine("Wysokosc: " + pole.height); // tutaj zdaje sie moze tak zostac, nomenklatura nie ma znaczenia
-                        if (pole.energy != 0) // dla danego pola wysokosc jest bezwzgledna
-                            Console.WriteLine("Energia: " + pole.energy); // ---||---
-                        if (pole.obstacle)
-                            Console.WriteLine("Przeszkoda");
-                        if (pole.agent != null)
-                            Console.WriteLine("Agent" + pole.agent.agentname + " i jest obrocony na " + pole.agent.direction.ToString());
-                        Console.WriteLine("-----------------------------");
-                    }
-                }
         
+        Recharge();
+        }
+
+
+        private static void Look() {
+	            OrientedField[] pola = agentTomek.Look();
+	            foreach (OrientedField pole in pola)
+	            {
+	                Console.WriteLine("-----------------------------");
+	                Console.WriteLine("POLE " + pole.x + "," + pole.y);
+	                Console.WriteLine("Wysokosc: " + pole.height);
+	                if (pole.energy != 0)
+	                    Console.WriteLine("Energia: " + pole.energy);
+	                if (pole.obstacle)
+	                    Console.WriteLine("Przeszkoda");
+	                if (pole.agent != null)
+	                    Console.WriteLine("Agent " + pole.agent.fullName + " i jest obrocony na " + pole.agent.direction.ToString());
+	                Console.WriteLine("-----------------------------");
+         	   }
+                 }
+         
         
 
         

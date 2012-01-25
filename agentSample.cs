@@ -296,41 +296,85 @@ else{
         
         
        // pamiec.tabela[100+PoleR().wspolrzedna_x,100].set_wysokosc
-      /*  
-        private static Wspolrzedne PoleR() //zwraca pole po prawej stronie agenta
+     
+       private static Wspolrzedne PoleR() //zwraca pole po prawej stronie agenta
         {
         	if (kierunek=="N"){
-        		Wspolrzedne N;
-        		N.wspolrzedna_x=aktualne_x+1;
-        		N.wspolrzedna_y=aktualne_y;
-        	 	return N;
+        		Wspolrzedne wsp;
+        		wsp.wspolrzedna_x=aktualne_x+1;
+        		wsp.wspolrzedna_y=aktualne_y;
+        	 	return wsp;
         	}
                 
 
-             else if(kierunek=="E")
+       	else if(kierunek=="E"){
+       		    Wspolrzedne wsp;
+        		wsp.wspolrzedna_x=aktualne_x;
+        		wsp.wspolrzedna_y=aktualne_y-1;
+        	 	return wsp;
+       	}
                 
 
-             else if(kierunek=="S")
+       	else if(kierunek=="S"){
+       		    Wspolrzedne wsp;
+        		wsp.wspolrzedna_x=aktualne_x-1;
+        		wsp.wspolrzedna_y=aktualne_y;
+        	 	return wsp;
+       	}
                 
 
-             else if(kierunek=="W")
-                
+       	else if(kierunek=="W"){
+       			Wspolrzedne wsp;
+        		wsp.wspolrzedna_x=aktualne_x;
+        		wsp.wspolrzedna_y=aktualne_y+1;
+        	 	return wsp;
+       	}
+       	
+       			Wspolrzedne wsp1;
+       			wsp1.wspolrzedna_x=aktualne_x;
+        		wsp1.wspolrzedna_y=aktualne_y;
+                return wsp1;
         }
         
         private static void PoleL() //zwraca pole po lewej stronie agenta
         {
-        	 if (kierunek=="N")
+        	if (kierunek=="N"){
+        		Wspolrzedne wsp;
+        		wsp.wspolrzedna_x=aktualne_x-1;
+        		wsp.wspolrzedna_y=aktualne_y;
+        	 	return wsp;
+        	}
                 
 
-             else if(kierunek=="E")
+       	else if(kierunek=="E"){
+       		    Wspolrzedne wsp;
+        		wsp.wspolrzedna_x=aktualne_x;
+        		wsp.wspolrzedna_y=aktualne_y+1;
+        	 	return wsp;
+       	}
                 
 
-             else if(kierunek=="S")
+       	else if(kierunek=="S"){
+       		    Wspolrzedne wsp;
+        		wsp.wspolrzedna_x=aktualne_x+1;
+        		wsp.wspolrzedna_y=aktualne_y;
+        	 	return wsp;
+       	}
                 
 
-             else if(kierunek=="W")
+       	else if(kierunek=="W"){
+       			Wspolrzedne wsp;
+        		wsp.wspolrzedna_x=aktualne_x;
+        		wsp.wspolrzedna_y=aktualne_y-1;
+        	 	return wsp;
+       	}
+       	
+       			Wspolrzedne wsp1;
+       			wsp1.wspolrzedna_x=aktualne_x;
+        		wsp1.wspolrzedna_y=aktualne_y;
+                return wsp1;
         }
-        */
+        
 
         //obracamy się w prawo
         private static void RotateRight()

@@ -16,24 +16,23 @@ namespace CsClient
 
         static AgentAPI agentTomek; //nasz agent, instancja klasy AgentAPI
         static int energy; //tu zapisujemy aktualną energię naszego agenta
-        static WorldParameters cennikSwiata; //tu zapisujemy informacje o świecie
-        static int[,] Przeszkody; //deklaracja tablicy, w ktorej bedziemy przetrzymywac wsp. przeszkod.
-        static int[,] ZrodlaNieOdn; //deklaracja tablicy, w ktorej bedziemy trzymac wsp. zrodel energii NieOdnawialnych
-        static int[,] ZrodlaOdn; //tutaj trzymamy wsp. odnawialnych
-        static int ObecnePolozenieX=0;
-        static int ObecnePolozenieY=0;
+        static WorldParameters cennikSwiata; //tu zapisujemy informacje o świecie   
         static string kierunek="N"; // jako domyslna wart. przyjmuje N, nie jest wazne jaki kierunek jest to faktycznie
          // bo wykorzystujemy to tylko do wlasnych potrzeb.
          // pozniej przyjmuje W, N, E, S - potrzebne od zapamietywania kierunku -> modyfikacji polozenia
-        int poleDoceloweX=0;
-        int poleDoceloweY=0;
         static string gimie = "";
-        //public Bot myBot;
-       	//public User myUser;
-
+        static int aktualne_x=0;
+        static int aktualne_y=0;
+		
+		
+       	
+       	
         // Nasza metoda nasłuchująca
         static void Listen(String krzyczacyAgent, String komunikat) {
             Console.WriteLine(krzyczacyAgent + " krzyczy " + komunikat);
+            getOutput(komunikat);
+              agentTomek.Speak(Console.ReadLine(), 1);
+            //ConReadline();
         }
 
         static void Main(string[] args)
@@ -78,6 +77,7 @@ namespace CsClient
                     //ustawiamy nasza energie na poczatkowa energie kazdego agenta w danym swiecie
                     energy = cennikSwiata.initialEnergy;
                     //przechodzimy do obslugi zdarzen z klawiatury. Zamiast tej funkcji wstaw logikę poruszania się twojego agenta.
+                    pamiec.tabela[100,100].set_odwiedzone(true); //odwiedzanie pola startowego
                     KeyReader();
                     //na koncu rozlaczamy naszego agenta
                     agentTomek.Disconnect();
@@ -140,8 +140,8 @@ namespace CsClient
         	{
         		
         	int first = str.IndexOf("krzyczy");
-        	int last = str.LastIndexOf("");
-            string str2 = str.Substring(first+8, last);
+        	int last = str.Length;
+            string str2 = str.Substring(first+7, last);
         	getOutput(str2);
         	    	
         	}
@@ -293,6 +293,44 @@ else{
             }
            
         }
+        
+        
+       // pamiec.tabela[100+PoleR().wspolrzedna_x,100].set_wysokosc
+      /*  
+        private static Wspolrzedne PoleR() //zwraca pole po prawej stronie agenta
+        {
+        	if (kierunek=="N"){
+        		Wspolrzedne N;
+        		N.wspolrzedna_x=aktualne_x+1;
+        		N.wspolrzedna_y=aktualne_y;
+        	 	return N;
+        	}
+                
+
+             else if(kierunek=="E")
+                
+
+             else if(kierunek=="S")
+                
+
+             else if(kierunek=="W")
+                
+        }
+        
+        private static void PoleL() //zwraca pole po lewej stronie agenta
+        {
+        	 if (kierunek=="N")
+                
+
+             else if(kierunek=="E")
+                
+
+             else if(kierunek=="S")
+                
+
+             else if(kierunek=="W")
+        }
+        */
 
         //obracamy się w prawo
         private static void RotateRight()
@@ -329,12 +367,29 @@ else{
                 
             if (energy >= cennikSwiata.moveCost)
                 energy -= cennikSwiata.moveCost;
-        	System.Threading.Thread.Sleep(2000);  
+        	System.Threading.Thread.Sleep(1000);
+        	Look();
+        	Recharge();
         	
+        	if(kierunek=="N")
+        		aktualne_y++;
+        	else if(kierunek=="S")
+        		aktualne_y--;
+        	else if(kierunek=="W")
+        		aktualne_x--;
+        	else if(kierunek=="E")
+        		aktualne_x++;
+        	
+        	
+			pamiec.tabela[100+aktualne_x,100+aktualne_y].set_odwiedzone(true);
+        		
         
-        Recharge();
+        
         }
 
+        
+        static Mapa pamiec = new CsClient.Mapa();
+        
 
         private static void Look() {
 	            OrientedField[] pola = agentTomek.Look();
@@ -343,10 +398,18 @@ else{
 	                Console.WriteLine("-----------------------------");
 	                Console.WriteLine("POLE " + pole.x + "," + pole.y);
 	                Console.WriteLine("Wysokosc: " + pole.height);
-	                if (pole.energy != 0)
+	                pamiec.tabela[100+pole.x,100+pole.y].set_wysokosc(pole.height);
+					pamiec.tabela[100+pole.x,100+pole.y].set_poznane(true);	                
+	              
+	              if (pole.energy != 0){
 	                    Console.WriteLine("Energia: " + pole.energy);
-	                if (pole.obstacle)
+	                    pamiec.tabela[100+pole.x,100+pole.y].set_niepewne_zrodlo(true);
+	               		//Console.WriteLine(pamiec.tabela[100+pole.x,100+pole.y].get_niepewne_zrodlo());
+	              }
+	              if (pole.obstacle){
 	                    Console.WriteLine("Przeszkoda");
+	                    pamiec.tabela[100+pole.x,100+pole.y].set_przeszkoda(true);     
+	              }
 	                if (pole.agent != null)
 	                    Console.WriteLine("Agent " + pole.agent.fullName + " i jest obrocony na " + pole.agent.direction.ToString());
 	                Console.WriteLine("-----------------------------");
